@@ -794,6 +794,10 @@ details p {
   gap: 4px;
 }
 
+.footer-links {
+  justify-items: end;
+}
+
 .site-footer small {
   color: rgba(255, 255, 255, 0.58);
   font-size: 12px;
@@ -805,6 +809,49 @@ details p {
 .site-footer span,
 .site-footer a {
   color: rgba(255, 255, 255, 0.7);
+}
+
+.policy-page {
+  width: min(900px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 142px 0 82px;
+}
+
+.policy-hero {
+  padding-bottom: 34px;
+  border-bottom: 1px solid var(--line);
+}
+
+.policy-hero h1 {
+  margin: 0;
+  font-size: clamp(44px, 6vw, 72px);
+  line-height: 1;
+}
+
+.policy-hero p:last-child {
+  margin: 16px 0 0;
+  color: var(--muted);
+}
+
+.policy-content {
+  display: grid;
+  gap: 18px;
+  padding-top: 34px;
+}
+
+.policy-content h2 {
+  margin: 20px 0 0;
+  font-size: 22px;
+}
+
+.policy-content p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.policy-content a {
+  color: var(--red);
+  font-weight: 700;
 }
 
 @media (max-width: 860px) {
@@ -925,5 +972,9 @@ details p {
 
   .site-footer {
     display: grid;
+  }
+
+  .footer-links {
+    justify-items: start;
   }
 }
