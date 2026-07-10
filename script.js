@@ -7,6 +7,7 @@ const pairsNote = document.querySelector("[data-pairs-note]");
 const finishSelect = document.querySelector("[data-finish]");
 const installSelect = document.querySelector("[data-install]");
 const estimate = document.querySelector("[data-estimate]");
+const estimateField = document.querySelector("[data-estimate-field]");
 const form = document.querySelector("[data-quote-form]");
 const formMessage = document.querySelector("[data-form-message]");
 const galleryCarousels = document.querySelectorAll("[data-gallery-carousel]");
@@ -43,6 +44,7 @@ function updateEstimate() {
 
   const subtotal = (base + finish + install) * pairs;
   estimate.textContent = `£${subtotal.toLocaleString("en-GB")} GBP`;
+  estimateField.value = estimate.textContent;
 }
 
 menuButton.addEventListener("click", () => {
@@ -63,9 +65,29 @@ pairsInput.addEventListener("input", updateEstimate);
 finishSelect.addEventListener("change", updateEstimate);
 installSelect.addEventListener("change", updateEstimate);
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  formMessage.textContent = "Thanks. Your design proof request is ready to send.";
+  formMessage.textContent = "Sending your request...";
+
+  try {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Formspree submission failed");
+    }
+
+    form.reset();
+    updateEstimate();
+    formMessage.textContent = "Thanks. Your design proof request has been sent.";
+  } catch (error) {
+    formMessage.textContent = "Sorry, something went wrong. Please email info@canadianhockey.co.uk.";
+  }
 });
 
 function showLightboxImage(nextIndex) {

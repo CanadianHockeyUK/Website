@@ -18,24 +18,26 @@
   </head>
   <body>
     <header class="site-header" data-header>
-      <a class="brand" href="#top" aria-label="Canadian Hockey Wraps website home">
-        <img class="brand-mark" src="assets/ch-logo.png" alt="" />
-        <span class="brand-text">
-          <span>Canadian Hockey</span>
-          <small>Wraps</small>
-        </span>
-      </a>
-      <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="site-nav" aria-label="Primary navigation" data-nav>
-        <a href="#gallery">Gallery</a>
-        <a href="#wraps">Options</a>
-        <a href="#process">Process</a>
-        <a href="#quote">Quote</a>
-      </nav>
+      <div class="site-header-inner">
+        <a class="brand" href="#top" aria-label="Canadian Hockey Wraps website home">
+          <img class="brand-mark" src="assets/ch-logo.png" alt="" />
+          <span class="brand-text">
+            <span>Canadian Hockey</span>
+            <small>Wraps</small>
+          </span>
+        </a>
+        <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="site-nav" aria-label="Primary navigation" data-nav>
+          <a href="#gallery">Gallery</a>
+          <a href="#wraps">Options</a>
+          <a href="#process">Process</a>
+          <a href="#quote">Quote</a>
+        </nav>
+      </div>
     </header>
 
     <main id="top">
@@ -171,7 +173,9 @@
           </div>
         </div>
 
-        <form class="quote-form" data-quote-form>
+        <form class="quote-form" action="https://formspree.io/f/xjgqnojv" method="POST" data-quote-form>
+          <input type="hidden" name="_subject" value="New Canadian Hockey Wraps proof request" />
+          <input type="hidden" name="estimated_subtotal" value="£69 GBP" data-estimate-field />
           <label>
             Name
             <input type="text" name="name" placeholder="Your name" required />

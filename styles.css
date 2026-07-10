@@ -47,13 +47,19 @@ a {
   top: 0;
   left: 0;
   right: 0;
+  padding: 16px clamp(18px, 4vw, 54px);
+  color: var(--ink);
+  transition: background 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+
+.site-header-inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 16px clamp(18px, 4vw, 54px);
-  color: var(--ink);
-  transition: background 180ms ease, box-shadow 180ms ease, color 180ms ease;
+  width: min(1160px, 100%);
+  margin: 0 auto;
 }
 
 .site-header.is-scrolled,
@@ -175,9 +181,9 @@ a {
 
 .hero-content {
   position: relative;
-  width: min(680px, calc(100% - 36px));
-  margin-left: clamp(18px, 5vw, 72px);
-  padding-top: 74px;
+  width: min(1160px, calc(100% - 36px));
+  margin: 0 auto;
+  padding-top: 104px;
   transform: translateY(-24px);
 }
 
@@ -781,8 +787,8 @@ details p {
   .site-nav {
     position: absolute;
     top: calc(100% - 4px);
-    left: 18px;
-    right: 18px;
+    left: 0;
+    right: 0;
     display: none;
     grid-template-columns: 1fr;
     padding: 10px;
