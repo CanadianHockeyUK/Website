@@ -412,12 +412,13 @@ a {
   gap: 12px;
   padding: 10px 14px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.62);
-  box-shadow: 0 8px 24px rgba(16, 20, 23, 0.07);
+  background: rgba(255, 255, 255, 0.44);
+  box-shadow: 0 8px 24px rgba(16, 20, 23, 0.04);
   backdrop-filter: blur(10px);
 }
 
 .gallery-item figcaption span {
+  color: rgba(16, 20, 23, 0.72);
   font-weight: 800;
 }
 
@@ -599,6 +600,14 @@ a {
 .steps p {
   margin: 0;
   color: var(--muted);
+}
+
+.step-note {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .wrap-card strong {
@@ -908,6 +917,10 @@ details p {
 
   .skate-gallery {
     grid-template-columns: 1fr;
+  }
+
+  .gallery-blank {
+    display: none;
   }
 
   .site-footer {
