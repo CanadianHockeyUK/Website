@@ -86,7 +86,8 @@ form.addEventListener("submit", async (event) => {
     updateEstimate();
     formMessage.textContent = "Thanks. Your design proof request has been sent.";
   } catch (error) {
-    formMessage.textContent = "Sorry, something went wrong. Please email info@canadianhockey.co.uk.";
+    formMessage.textContent = "Opening secure form submission...";
+    form.submit();
   }
 });
 
