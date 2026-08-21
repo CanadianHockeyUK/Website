@@ -107,7 +107,7 @@ a {
   left: calc(100% + 12px);
   white-space: nowrap;
   color: rgba(16, 20, 23, 0.76);
-  font-family: Baskerville, "Libre Baskerville", Georgia, serif;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0;
