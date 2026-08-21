@@ -17,12 +17,16 @@ const lightboxClose = document.querySelector("[data-lightbox-close]");
 const lightboxPrevious = document.querySelector("[data-lightbox-prev]");
 const lightboxNext = document.querySelector("[data-lightbox-next]");
 const heroSequence = document.querySelector("[data-hero-sequence]");
+const heroScrollCue = document.querySelector(".hero-scroll-cue");
 const heroFrameCount = 84;
-const heroStartFrameIndex = 14;
+const heroDesktopStartFrameIndex = 14;
+const heroMobileStartFrameIndex = 14;
+const heroMobileFrameSpan = 43;
 const heroFrames = [];
+const mobileHeroQuery = window.matchMedia("(max-width: 860px)");
 let lightboxSlides = [];
 let lightboxIndex = 0;
-let heroFrameIndex = heroStartFrameIndex;
+let heroFrameIndex = getHeroInitialFrame();
 let heroSequenceReady = false;
 const heroContext = heroSequence?.getContext("2d");
 
@@ -70,6 +74,10 @@ function getHeroFramePath(index) {
   return `assets/hero-sequence/${String(index + 1).padStart(4, "0")}.png`;
 }
 
+function getHeroInitialFrame() {
+  return mobileHeroQuery.matches ? heroMobileStartFrameIndex : heroDesktopStartFrameIndex;
+}
+
 function drawHeroFrame(index) {
   if (!heroSequence || !heroContext || !heroSequenceReady) {
     return;
@@ -86,8 +94,25 @@ function drawHeroFrame(index) {
     return;
   }
 
-  heroContext.clearRect(0, 0, heroSequence.width, heroSequence.height);
-  heroContext.drawImage(frame, 0, 0, heroSequence.width, heroSequence.height);
+  const rect = heroSequence.getBoundingClientRect();
+  const pixelRatio = window.devicePixelRatio || 1;
+  const canvasWidth = Math.max(1, Math.round(rect.width * pixelRatio));
+  const canvasHeight = Math.max(1, Math.round(rect.height * pixelRatio));
+
+  if (heroSequence.width !== canvasWidth || heroSequence.height !== canvasHeight) {
+    heroSequence.width = canvasWidth;
+    heroSequence.height = canvasHeight;
+  }
+
+  const scale = Math.max(canvasWidth / frame.naturalWidth, canvasHeight / frame.naturalHeight);
+  const drawWidth = frame.naturalWidth * scale;
+  const drawHeight = frame.naturalHeight * scale;
+  const focusOffsetX = mobileHeroQuery.matches ? canvasWidth * -0.04 : 0;
+  const drawX = (canvasWidth - drawWidth) / 2 + focusOffsetX;
+  const drawY = (canvasHeight - drawHeight) / 2;
+
+  heroContext.clearRect(0, 0, canvasWidth, canvasHeight);
+  heroContext.drawImage(frame, drawX, drawY, drawWidth, drawHeight);
 }
 
 function updateHeroSequence() {
@@ -103,10 +128,16 @@ function updateHeroSequence() {
 
   const rect = hero.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const scrollRange = Math.max(1, rect.height * 0.92);
+  const isMobileHero = mobileHeroQuery.matches;
+  const scrollRange = isMobileHero ? viewportHeight * 1.55 : Math.max(1, rect.height * 0.92);
   const progress = Math.min(1, Math.max(0, -rect.top / scrollRange));
-  const reverseOffset = Math.round(progress * (heroFrameCount - 1));
-  const nextIndex = (heroStartFrameIndex - reverseOffset + heroFrameCount) % heroFrameCount;
+  const nextIndex = isMobileHero
+    ? (heroMobileStartFrameIndex - Math.round(progress * heroMobileFrameSpan) + heroFrameCount) % heroFrameCount
+    : (heroDesktopStartFrameIndex - Math.round(progress * (heroFrameCount - 1)) + heroFrameCount) % heroFrameCount;
+
+  if (heroScrollCue) {
+    heroScrollCue.style.opacity = isMobileHero ? String(Math.max(0, 1 - progress * 4)) : "";
+  }
 
   if (nextIndex !== heroFrameIndex) {
     heroFrameIndex = nextIndex;
@@ -127,14 +158,18 @@ function initHeroSequence() {
     if (index === 0) {
       frame.addEventListener("load", () => {
         heroSequenceReady = true;
-        drawHeroFrame(heroStartFrameIndex);
+        heroFrameIndex = getHeroInitialFrame();
+        drawHeroFrame(heroFrameIndex);
         updateHeroSequence();
       }, { once: true });
     }
   }
 
   window.addEventListener("scroll", updateHeroSequence, { passive: true });
-  window.addEventListener("resize", updateHeroSequence);
+  window.addEventListener("resize", () => {
+    drawHeroFrame(heroFrameIndex);
+    updateHeroSequence();
+  });
 }
 
 if (menuButton && nav) {
