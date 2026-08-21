@@ -316,6 +316,7 @@ a {
   opacity: 0.74;
   pointer-events: none;
   transform: translateY(-50%);
+  will-change: opacity;
   z-index: 0;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.28) 7%, rgba(0, 0, 0, 0.92) 20%, #000 32%);
   mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.28) 7%, rgba(0, 0, 0, 0.92) 20%, #000 32%);
@@ -1068,6 +1069,7 @@ details p {
     margin: 0 auto;
     opacity: 1;
     transform: none;
+    will-change: opacity;
     -webkit-mask-image: none;
     mask-image: none;
   }
@@ -1107,7 +1109,7 @@ details p {
 
   .hero-content {
     width: 100%;
-    margin: 92svh 0 0;
+    margin: 166svh 0 0;
     padding: 42px 18px 72px;
     transform: none;
     border-radius: 22px 22px 0 0;

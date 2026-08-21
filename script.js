@@ -27,6 +27,9 @@ const mobileHeroQuery = window.matchMedia("(max-width: 860px)");
 let lightboxSlides = [];
 let lightboxIndex = 0;
 let heroFrameIndex = getHeroInitialFrame();
+let heroTargetProgress = 0;
+let heroSmoothProgress = 0;
+let heroAnimationFrameId = null;
 let heroSequenceReady = false;
 const heroContext = heroSequence?.getContext("2d");
 
@@ -115,15 +118,15 @@ function drawHeroFrame(index) {
   heroContext.drawImage(frame, drawX, drawY, drawWidth, drawHeight);
 }
 
-function updateHeroSequence() {
+function getHeroSequenceState() {
   if (!heroSequence || !heroSequenceReady) {
-    return;
+    return null;
   }
 
   const hero = heroSequence.closest(".hero");
 
   if (!hero) {
-    return;
+    return null;
   }
 
   const rect = hero.getBoundingClientRect();
@@ -131,17 +134,62 @@ function updateHeroSequence() {
   const isMobileHero = mobileHeroQuery.matches;
   const scrollRange = isMobileHero ? viewportHeight * 1.55 : Math.max(1, rect.height * 0.92);
   const progress = Math.min(1, Math.max(0, -rect.top / scrollRange));
-  const nextIndex = isMobileHero
+
+  return { isMobileHero, progress };
+}
+
+function getHeroFrameIndex(progress, isMobileHero) {
+  return isMobileHero
     ? (heroMobileStartFrameIndex - Math.round(progress * heroMobileFrameSpan) + heroFrameCount) % heroFrameCount
     : (heroDesktopStartFrameIndex - Math.round(progress * (heroFrameCount - 1)) + heroFrameCount) % heroFrameCount;
+}
+
+function renderHeroSequence() {
+  const state = getHeroSequenceState();
+
+  if (!state) {
+    heroAnimationFrameId = null;
+    return;
+  }
+
+  const easing = state.isMobileHero ? 0.18 : 0.26;
+  const progressDelta = heroTargetProgress - heroSmoothProgress;
+
+  if (Math.abs(progressDelta) < 0.0015) {
+    heroSmoothProgress = heroTargetProgress;
+  } else {
+    heroSmoothProgress += progressDelta * easing;
+  }
+
+  const nextIndex = getHeroFrameIndex(heroSmoothProgress, state.isMobileHero);
 
   if (heroScrollCue) {
-    heroScrollCue.style.opacity = isMobileHero ? String(Math.max(0, 1 - progress * 4)) : "";
+    heroScrollCue.style.opacity = state.isMobileHero ? String(Math.max(0, 1 - heroTargetProgress * 4)) : "";
   }
 
   if (nextIndex !== heroFrameIndex) {
     heroFrameIndex = nextIndex;
     drawHeroFrame(heroFrameIndex);
+  }
+
+  if (heroSmoothProgress !== heroTargetProgress) {
+    heroAnimationFrameId = window.requestAnimationFrame(renderHeroSequence);
+  } else {
+    heroAnimationFrameId = null;
+  }
+}
+
+function updateHeroSequence() {
+  const state = getHeroSequenceState();
+
+  if (!state) {
+    return;
+  }
+
+  heroTargetProgress = state.progress;
+
+  if (!heroAnimationFrameId) {
+    heroAnimationFrameId = window.requestAnimationFrame(renderHeroSequence);
   }
 }
 
@@ -159,6 +207,8 @@ function initHeroSequence() {
       frame.addEventListener("load", () => {
         heroSequenceReady = true;
         heroFrameIndex = getHeroInitialFrame();
+        heroTargetProgress = 0;
+        heroSmoothProgress = 0;
         drawHeroFrame(heroFrameIndex);
         updateHeroSequence();
       }, { once: true });
