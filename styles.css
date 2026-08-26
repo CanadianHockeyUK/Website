@@ -54,11 +54,13 @@ body.has-lightbox {
 
 .loader-brand {
   gap: 20px;
+  max-width: calc(100vw - 32px);
   padding: 18px 22px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.62);
   box-shadow: 0 22px 70px rgba(16, 20, 23, 0.08);
   backdrop-filter: blur(18px) saturate(1.1);
+  animation-name: loaderBrandSettleLeft;
 }
 
 .loader-brand .brand-mark {
@@ -234,6 +236,28 @@ a {
   0%,
   44% {
     transform: translateX(58px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes loaderBrandSettleLeft {
+  0%,
+  44% {
+    transform: translateX(32px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes loaderBrandSettleMobile {
+  0%,
+  44% {
+    transform: translateX(14px);
   }
 
   100% {
@@ -1138,22 +1162,28 @@ details p {
   }
 
   .loader-brand {
-    gap: 13px;
-    padding: 16px 18px;
+    gap: 8px;
+    max-width: calc(100vw - 24px);
+    padding: 14px 12px;
+    animation-name: loaderBrandSettleMobile;
   }
 
   .loader-brand .brand-mark {
-    width: 50px;
-    height: 45px;
+    width: 42px;
+    height: 38px;
   }
 
   .loader-brand .brand-wordmark {
-    font-size: clamp(14px, 4.1vw, 20px);
+    font-size: clamp(11px, 3.2vw, 15px);
+  }
+
+  .loader-brand .brand-collab-mark {
+    font-size: 14px;
   }
 
   .loader-brand .brand-wraps-mark {
-    width: clamp(96px, 24vw, 138px);
-    height: 42px;
+    width: clamp(74px, 21vw, 96px);
+    height: 30px;
   }
 
   .menu-button {

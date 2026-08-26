@@ -32,15 +32,38 @@ let heroTargetProgress = 0;
 let heroSmoothProgress = 0;
 let heroAnimationFrameId = null;
 let heroSequenceReady = false;
+let cookieConsentLoaded = false;
 const heroContext = heroSequence?.getContext("2d");
+
+function loadCookieConsentScript() {
+  if (cookieConsentLoaded) {
+    return;
+  }
+
+  cookieConsentLoaded = true;
+
+  const cookieScript = document.createElement("script");
+  cookieScript.type = "text/javascript";
+  cookieScript.charset = "UTF-8";
+  cookieScript.src = "https://cdn.cookie-script.com/s/f7b29fd24d698bcb7625a7acf35b748c.js";
+  document.head.appendChild(cookieScript);
+}
 
 function hideSiteLoader() {
   if (!siteLoader) {
+    loadCookieConsentScript();
+    return;
+  }
+
+  if (siteLoader.classList.contains("is-hidden")) {
     return;
   }
 
   siteLoader.classList.add("is-hidden");
-  window.setTimeout(() => siteLoader.remove(), 650);
+  window.setTimeout(() => {
+    siteLoader.remove();
+    loadCookieConsentScript();
+  }, 650);
 }
 
 if (siteLoader) {
@@ -52,6 +75,8 @@ if (siteLoader) {
     const remaining = Math.max(loaderMinimumTime - elapsed, 450);
     window.setTimeout(hideSiteLoader, remaining);
   }, { once: true });
+} else {
+  window.addEventListener("load", loadCookieConsentScript, { once: true });
 }
 
 function setHeaderState() {
