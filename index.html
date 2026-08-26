@@ -27,13 +27,31 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=57" />
+    <link rel="stylesheet" href="styles.css?v=83" />
   </head>
   <body>
+    <div class="site-loader" data-loader aria-hidden="true">
+      <div class="brand loader-brand">
+        <img class="brand-mark" src="assets/new-ch-logo.png" alt="" />
+        <span class="brand-wordmark" aria-hidden="true">
+          <span class="brand-word brand-word-canadian">Canadian</span>
+          <span class="brand-word brand-word-hockey">Hockey</span>
+        </span>
+        <span class="brand-collab-mark" aria-hidden="true">×</span>
+        <img class="brand-wraps-mark" src="assets/wraps-logo.png?v=6" alt="" />
+      </div>
+    </div>
+
     <header class="site-header" data-header>
       <div class="site-header-inner">
         <a class="brand" href="#top" aria-label="Canadian Hockey Wraps website home">
           <img class="brand-mark" src="assets/new-ch-logo.png" alt="Canadian Hockey" />
+          <span class="brand-wordmark" aria-hidden="true">
+            <span class="brand-word brand-word-canadian">Canadian</span>
+            <span class="brand-word brand-word-hockey">Hockey</span>
+          </span>
+          <span class="brand-collab-mark" aria-hidden="true">×</span>
+          <img class="brand-wraps-mark" src="assets/wraps-logo.png?v=6" alt="Wraps" />
         </a>
       </div>
     </header>
@@ -72,15 +90,22 @@
         <div class="skate-gallery">
           <figure class="gallery-item gallery-carousel" data-gallery-carousel>
             <div class="gallery-slides">
+              <img class="is-active" src="assets/flylite-stealth-wrap-1.jpg?v=2" alt="Flylite hockey skate finished in a Stealth Wrap close up" />
+              <img src="assets/flylite-stealth-wrap-2.jpg?v=2" alt="Flylite hockey skate Stealth Wrap side profile" />
+              <img src="assets/flylite-stealth-wrap-3.jpg?v=2" alt="Flylite hockey skate Stealth Wrap detail view" />
+            </div>
+            <button class="gallery-arrow gallery-arrow-left" type="button" aria-label="Previous Flylite Stealth Wrap photo" data-gallery-prev>‹</button>
+            <button class="gallery-arrow gallery-arrow-right" type="button" aria-label="Next Flylite Stealth Wrap photo" data-gallery-next>›</button>
+            <figcaption><span>Flylite</span><small>Stealth Wrap</small></figcaption>
+          </figure>
+          <figure class="gallery-item gallery-carousel" data-gallery-carousel>
+            <div class="gallery-slides">
               <img class="is-active" src="assets/wrapped-skates-blue-vapor-1.jpg" alt="Blue custom wrapped Bauer Vapor hockey skate close up" />
               <img src="assets/wrapped-skates-blue-vapor-2.jpg" alt="Pair of blue custom wrapped Bauer Vapor hockey skates" />
             </div>
             <button class="gallery-arrow gallery-arrow-left" type="button" aria-label="Previous skate photo" data-gallery-prev>‹</button>
             <button class="gallery-arrow gallery-arrow-right" type="button" aria-label="Next skate photo" data-gallery-next>›</button>
             <figcaption><span>Vapor X5 Pro</span></figcaption>
-          </figure>
-          <figure class="gallery-item gallery-blank" aria-label="Blank skate wrap gallery slot">
-            <figcaption><span></span><small></small></figcaption>
           </figure>
           <figure class="gallery-item gallery-blank" aria-label="Blank skate wrap gallery slot">
             <figcaption><span></span><small></small></figcaption>
@@ -277,6 +302,6 @@
       <button class="lightbox-arrow lightbox-arrow-right" type="button" aria-label="Next full-size skate photo" data-lightbox-next>›</button>
     </div>
 
-    <script src="script.js?v=57"></script>
+    <script src="script.js?v=83"></script>
   </body>
 </html>

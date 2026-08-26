@@ -31,6 +31,54 @@ body.has-lightbox {
   overflow: hidden;
 }
 
+.site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(227, 7, 46, 0.08), transparent 30%),
+    linear-gradient(180deg, #ffffff 0%, #f3f8fa 100%);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 540ms ease, visibility 540ms ease;
+}
+
+.site-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-brand {
+  gap: 20px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 22px 70px rgba(16, 20, 23, 0.08);
+  backdrop-filter: blur(18px) saturate(1.1);
+}
+
+.loader-brand .brand-mark {
+  width: 58px;
+  height: 52px;
+}
+
+.loader-brand .brand-wordmark {
+  font-size: clamp(15px, 2.35vw, 24px);
+}
+
+.loader-brand .brand-collab-mark {
+  font-size: clamp(17px, 1.8vw, 22px);
+}
+
+.loader-brand .brand-wraps-mark {
+  width: clamp(106px, 16vw, 176px);
+  height: 50px;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -86,35 +134,66 @@ a {
   position: relative;
   display: inline-flex;
   align-items: center;
-  animation: brandIntroMove 2.8s cubic-bezier(0.22, 0.9, 0.18, 1) 180ms both;
+  gap: 10px;
+  animation: brandSettleLeft 1200ms cubic-bezier(0.22, 0.9, 0.18, 1) 260ms both;
 }
 
 .brand-mark {
   position: relative;
   z-index: 2;
   display: block;
-  width: 52px;
-  height: 46px;
+  width: 46px;
+  height: 41px;
   object-fit: contain;
   border: 0;
-  animation: logoIntroScale 2.8s cubic-bezier(0.22, 0.9, 0.18, 1) 180ms both;
+  animation: logoDropIn 780ms cubic-bezier(0.22, 0.9, 0.18, 1) 120ms both;
 }
 
 .brand::after {
-  content: "Canadian Hockey";
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 12px);
-  white-space: nowrap;
-  color: rgba(16, 20, 23, 0.76);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  content: none;
+}
+
+.brand-wordmark {
+  display: grid;
+  gap: 3px;
+  font-family: "Bridgends Expanded", "Brigends Expanded", "Arial Black", Impact, sans-serif;
+  font-size: clamp(14px, 1.45vw, 18px);
+  font-stretch: expanded;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 0.86;
+  text-transform: uppercase;
+  animation: wordmarkReveal 760ms ease 820ms both;
+}
+
+.brand-word {
+  display: block;
+}
+
+.brand-word-canadian {
+  color: #e3072e;
+}
+
+.brand-word-hockey {
+  color: #676261;
+}
+
+.brand-collab-mark {
+  color: rgba(16, 20, 23, 0.42);
   font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0;
-  opacity: 0;
-  clip-path: inset(0 100% 0 0);
-  transform: translate(-20px, -50%);
-  animation: brandTextSwipe 2.8s cubic-bezier(0.22, 0.9, 0.18, 1) 180ms both;
+  font-weight: 700;
+  line-height: 1;
+  animation: wordmarkReveal 760ms ease 940ms both;
+}
+
+.brand-wraps-mark {
+  display: block;
+  width: clamp(78px, 9vw, 112px);
+  height: 34px;
+  object-fit: contain;
+  object-position: left center;
+  border-radius: 4px;
+  animation: wordmarkReveal 760ms ease 1040ms both;
 }
 
 @keyframes headerReveal {
@@ -151,16 +230,41 @@ a {
   }
 }
 
-@keyframes logoIntroScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.86);
+@keyframes brandSettleLeft {
+  0%,
+  44% {
+    transform: translateX(58px);
   }
 
-  14%,
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes logoDropIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.9);
+  }
+
+  70%,
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes wordmarkReveal {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateX(0);
   }
 }
 
@@ -208,6 +312,9 @@ a {
   .site-header,
   .brand,
   .brand-mark,
+  .brand-wordmark,
+  .brand-collab-mark,
+  .brand-wraps-mark,
   .brand::after,
   .hero-sequence {
     animation: none;
@@ -557,29 +664,33 @@ a {
 
 .gallery-item figcaption {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
-  left: 12px;
+  right: auto;
+  bottom: 10px;
+  left: 10px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.44);
-  box-shadow: 0 8px 24px rgba(16, 20, 23, 0.04);
-  backdrop-filter: blur(10px);
+  max-width: calc(100% - 20px);
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 5px;
+  background: rgba(251, 252, 253, 0.28);
+  box-shadow: none;
+  backdrop-filter: blur(8px);
 }
 
 .gallery-item figcaption span {
-  color: rgba(16, 20, 23, 0.72);
-  font-weight: 800;
+  color: rgba(16, 20, 23, 0.58);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .gallery-item figcaption small {
-  color: var(--muted);
-  font-size: 12px;
-  text-align: right;
+  color: rgba(16, 20, 23, 0.58);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
 }
 
 .image-lightbox {
@@ -1009,6 +1120,42 @@ details p {
 }
 
 @media (max-width: 860px) {
+  .brand {
+    gap: 13px;
+  }
+
+  .brand-wordmark {
+    font-size: clamp(15px, 2.5vw, 22px);
+  }
+
+  .brand-collab-mark {
+    font-size: 18px;
+  }
+
+  .brand-wraps-mark {
+    width: clamp(92px, 15vw, 146px);
+    height: 44px;
+  }
+
+  .loader-brand {
+    gap: 13px;
+    padding: 16px 18px;
+  }
+
+  .loader-brand .brand-mark {
+    width: 50px;
+    height: 45px;
+  }
+
+  .loader-brand .brand-wordmark {
+    font-size: clamp(14px, 4.1vw, 20px);
+  }
+
+  .loader-brand .brand-wraps-mark {
+    width: clamp(96px, 24vw, 138px);
+    height: 42px;
+  }
+
   .menu-button {
     display: block;
   }

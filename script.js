@@ -18,6 +18,7 @@ const lightboxPrevious = document.querySelector("[data-lightbox-prev]");
 const lightboxNext = document.querySelector("[data-lightbox-next]");
 const heroSequence = document.querySelector("[data-hero-sequence]");
 const heroScrollCue = document.querySelector(".hero-scroll-cue");
+const siteLoader = document.querySelector("[data-loader]");
 const heroFrameCount = 84;
 const heroDesktopStartFrameIndex = 14;
 const heroMobileStartFrameIndex = 14;
@@ -32,6 +33,26 @@ let heroSmoothProgress = 0;
 let heroAnimationFrameId = null;
 let heroSequenceReady = false;
 const heroContext = heroSequence?.getContext("2d");
+
+function hideSiteLoader() {
+  if (!siteLoader) {
+    return;
+  }
+
+  siteLoader.classList.add("is-hidden");
+  window.setTimeout(() => siteLoader.remove(), 650);
+}
+
+if (siteLoader) {
+  const loaderMinimumTime = 2400;
+  const loaderStartedAt = performance.now();
+  window.setTimeout(hideSiteLoader, loaderMinimumTime);
+  window.addEventListener("load", () => {
+    const elapsed = performance.now() - loaderStartedAt;
+    const remaining = Math.max(loaderMinimumTime - elapsed, 450);
+    window.setTimeout(hideSiteLoader, remaining);
+  }, { once: true });
+}
 
 function setHeaderState() {
   if (!header) {
