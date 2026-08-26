@@ -120,7 +120,7 @@ function updateEstimate() {
 }
 
 function getHeroFramePath(index) {
-  return `assets/hero-sequence/${String(index + 1).padStart(4, "0")}.png`;
+  return `assets/hero-sequence-optimized/${String(index + 1).padStart(4, "0")}.jpg`;
 }
 
 function getHeroInitialFrame() {
@@ -244,22 +244,47 @@ function initHeroSequence() {
     return;
   }
 
-  for (let index = 0; index < heroFrameCount; index += 1) {
+  const initialFrameIndex = getHeroInitialFrame();
+
+  function loadHeroFrame(index, onLoad) {
+    if (heroFrames[index]) {
+      if (onLoad && heroFrames[index].complete) {
+        onLoad();
+      }
+
+      return;
+    }
+
     const frame = new Image();
+    frame.decoding = "async";
     frame.src = getHeroFramePath(index);
     heroFrames[index] = frame;
 
-    if (index === 0) {
-      frame.addEventListener("load", () => {
-        heroSequenceReady = true;
-        heroFrameIndex = getHeroInitialFrame();
-        heroTargetProgress = 0;
-        heroSmoothProgress = 0;
-        drawHeroFrame(heroFrameIndex);
-        updateHeroSequence();
-      }, { once: true });
+    if (onLoad) {
+      frame.addEventListener("load", onLoad, { once: true });
     }
   }
+
+  loadHeroFrame(initialFrameIndex, () => {
+    heroSequenceReady = true;
+    heroFrameIndex = initialFrameIndex;
+    heroTargetProgress = 0;
+    heroSmoothProgress = 0;
+    drawHeroFrame(heroFrameIndex);
+    updateHeroSequence();
+
+    const preloadRemainingFrames = () => {
+      for (let index = 0; index < heroFrameCount; index += 1) {
+        loadHeroFrame(index);
+      }
+    };
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(preloadRemainingFrames, { timeout: 1800 });
+    } else {
+      window.setTimeout(preloadRemainingFrames, 700);
+    }
+  });
 
   window.addEventListener("scroll", updateHeroSequence, { passive: true });
   window.addEventListener("resize", () => {
